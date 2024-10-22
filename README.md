@@ -1,2 +1,2 @@
-# 2024-MacC-A9-DOMADO-Server
-🧸 🍎가 되지 말고 🍅가 되라
+# 2024-MacC-A9-DOMADO-Server1
+- [기능 Flow](https://github.com/DeveloperAcademy-POSTECH/2024-MacC-A9-DOMADO-Server/wiki/%EA%B3%B5%EC%9C%A0%EC%9E%90%EC%A0%84%EA%B1%B0-%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%A0%84%EC%B2%B4-%EA%B8%B0%EB%8A%A5-Flow#%EC%9E%90%EC%A0%84%EA%B1%B0-flow-%EC%97%90-%EB%94%B0%EB%A5%B8-%EC%98%88%EC%83%81%EB%90%98%EB%8A%94-feature-%EB%AA%A9%EB%A1%9D) : 서버 구성을 위한 서비스 기능 Flow 목록입니다. 
