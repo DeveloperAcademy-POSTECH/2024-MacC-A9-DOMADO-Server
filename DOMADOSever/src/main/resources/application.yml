@@ -1,40 +1,40 @@
 spring:
-  # ?????? ?? ??
+  # 데이터베이스 연결 설정
   datasource:
-    url: jdbc:h2:mem:testdb  # ??? DB ??
-    # url: jdbc:h2:file:./data/testdb  # ?? DB ?? (??? ???? ?? ?)
-    username: sa  # ?? ????
-    password:     # ?? ???? ??
+    url: jdbc:h2:mem:testdb  # 메모리 DB 모드
+    # url: jdbc:h2:file:./data/testdb  # 파일 DB 모드 (데이터 유지하고 싶은 경우)
+    username: sa  # 기본 사용자명
+    password:     # 기본 비밀번호 없음
     driver-class-name: org.h2.Driver
-  
-  # JPA ??
+
+  # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: create-drop  # ??? ??? ??, ??? ??
-    show-sql: true           # SQL ?? ?? ??
+      ddl-auto: create-drop  # 시작시 테이블 생성, 종료시 삭제
+    show-sql: true           # SQL 쿼리 콘솔 출력
     properties:
       hibernate:
-        format_sql: true     # SQL ?? ???
-    defer-datasource-initialization: true  # ??? ??? ??? ??
+        format_sql: true     # SQL 쿼리 포멧팅
+    defer-datasource-initialization: true  # 데이터 초기화 타이밍 조정
   
-  # H2 ?? ??
+  # H2 콘솔 설정
   h2:
     console:
-      enabled: true          # ? ?? ???
-      path: /h2-console      # ?? ?? ??
+      enabled: true          # 웹 콘솔 활성화
+      path: /h2-console      # 콘솔 접속 경로
   
-  # SQL ??? ??
+  # SQL 초기화 설정
   sql:
     init:
-      mode: always          # data.sql ?? ??
+      mode: always          # data.sql 항상 실행
 
-# ?? ??
+# 로깅설정
 logging:
   level:
-    org.hibernate.SQL: debug            # SQL ??
-    org.hibernate.type.descriptor.sql: trace  # SQL ???? ??
-    com.yourpackage: debug              # ?????? ??
+    org.hibernate.SQL: debug            # SQL 로깅
+    org.hibernate.type.descriptor.sql: trace  # SQL 파라미터 로깅
+    com.yourpackage: debug              # 어플리케이션 로깅
 
-# ?? ??
+# 서버 설정
 server:
   port: 8080
