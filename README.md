@@ -3,3 +3,4 @@
 - [Real Outline](https://github.com/DeveloperAcademy-POSTECH/2024-MacC-A9-DOMADO-Server/wiki/%EA%B3%B5%EC%9C%A0%EC%9E%90%EC%A0%84%EA%B1%B0-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%84%A4%EA%B3%84-%E2%80%90-Real): 실제 서비스 구현시 전체 개요 및 고려사항 목록입니다.
 - [Demo Outline](https://github.com/DeveloperAcademy-POSTECH/2024-MacC-A9-DOMADO-Server/wiki/%EA%B3%B5%EC%9C%A0-%EC%9E%90%EC%A0%84%EA%B1%B0-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%84%A4%EA%B3%84-%E2%80%90-Sample) : 실제 서비스 구현 전 앱 시연을 위해 구성할 서버의 전체 개요 및 고려사항 목록입니다. 
  - [엔티티 설계 1차](https://github.com/DeveloperAcademy-POSTECH/2024-MacC-A9-DOMADO-Server/wiki/%EC%97%94%ED%8B%B0%ED%8B%B0-%EC%84%A4%EA%B3%84-ver.01) : 기능 구현전 비즈니스 로직에 가장 기초가 되는 객체들을 모델링합니다. 
+- [응답 표준화 및 에러처리 정의](https://github.com/DeveloperAcademy-POSTECH/2024-MacC-A9-DOMADO-Server/wiki/%EC%9D%91%EB%8B%B5-%ED%91%9C%EC%A4%80%ED%99%94-%EB%B0%8F-%EC%97%90%EB%9F%AC-%EC%B2%98%EB%A6%AC-%EB%B0%A9%EB%B2%95-%EC%A0%95%EC%9D%98) : 클라이언트의 서버 호출에 대한 응답 양식을 표준화하고 에러 계층구조 및 핸들링 방법을 정의합니다. 
