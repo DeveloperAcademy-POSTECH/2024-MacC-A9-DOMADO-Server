@@ -27,6 +27,8 @@ public class Bike extends BaseEntity {
     @Column(nullable = false)
     private Integer batteryLevel;
 
+    private boolean isHiBike = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BikeStatus status = BikeStatus.LOCKED;
