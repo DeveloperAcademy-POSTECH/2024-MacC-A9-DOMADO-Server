@@ -31,7 +31,7 @@ public class Bike extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BikeStatus status = BikeStatus.LOCKED;
+    private BikeStatus status = BikeStatus.PARKED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "home_hub_id", nullable = false)
