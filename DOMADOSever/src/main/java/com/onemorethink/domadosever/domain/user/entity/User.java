@@ -1,5 +1,7 @@
 package com.onemorethink.domadosever.domain.user.entity;
 
+import com.onemorethink.domadosever.domain.coupon.entity.Coupon;
+import com.onemorethink.domadosever.domain.coupon.entity.Stamp;
 import com.onemorethink.domadosever.domain.payment.entity.PaymentMethod;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.global.common.BaseEntity;
@@ -50,5 +52,11 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<PaymentMethod> paymentMethods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Stamp> stamps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Coupon> coupons = new ArrayList<>();
 
 }
