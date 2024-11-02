@@ -1,5 +1,6 @@
 package com.onemorethink.domadosever.domain.payment.entity;
 
+import com.onemorethink.domadosever.domain.coupon.entity.Coupon;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
@@ -39,5 +40,14 @@ public class Payment extends BaseEntity {
     private  String transactionId; // 외부 결제 시스템의 거래 ID
 
     private  String failureReason; // 거래 실패 사유
+
+    @OneToOne(mappedBy = "usedPayment")
+    private Coupon usedCoupon;
+
+    @Column
+    private Integer originalMinutes;
+
+    @Column
+    private Integer discountedMinutes;
 
 }
