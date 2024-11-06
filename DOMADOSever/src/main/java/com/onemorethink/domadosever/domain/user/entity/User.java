@@ -44,9 +44,6 @@ public class User extends BaseEntity {
     @JoinColumn(name = "current_rental_id")
     private Rental currentRental;
 
-    @OneToMany(mappedBy = "user")
-    private List<Rental> rentalHistory = new ArrayList<>();
-
     @Column(nullable = false)
     private boolean hasRegisteredPayments = false;
 
