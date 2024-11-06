@@ -39,6 +39,8 @@ public class Bike extends BaseEntity {
     @JoinColumn(name = "current_station_id")
     private Station currentStation;
 
+    private Integer currentDockId;
+
     @Column(nullable = false)
     private Double currentLatitude;
     @Column(nullable = false)
