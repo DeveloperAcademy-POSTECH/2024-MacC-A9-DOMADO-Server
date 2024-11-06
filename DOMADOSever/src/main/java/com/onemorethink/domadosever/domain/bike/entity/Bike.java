@@ -27,8 +27,6 @@ public class Bike extends BaseEntity {
     @Column(nullable = false)
     private Integer batteryLevel;
 
-    private boolean isHiBike = false;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BikeStatus status = BikeStatus.PARKED;
@@ -46,10 +44,4 @@ public class Bike extends BaseEntity {
     @Column(nullable = false)
     private Double currentLongitude;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_user_id")
-    private User currentUser;
-
-    @OneToMany(mappedBy = "bike")
-    private List<Rental> rentals = new ArrayList<>();
 }
