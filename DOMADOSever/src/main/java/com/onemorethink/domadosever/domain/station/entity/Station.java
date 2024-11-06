@@ -39,4 +39,7 @@ public class Station extends BaseEntity {
 
     @OneToMany(mappedBy = "currentStation")
     private List<Bike> parkedBikes = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean temporary = false;
 }
