@@ -41,6 +41,8 @@ public class Bike extends BaseEntity {
 
     private Integer currentDockId;
 
+    private Boolean isHiBike = false;
+
     @Column(nullable = false)
     private Double currentLatitude;
     @Column(nullable = false)
