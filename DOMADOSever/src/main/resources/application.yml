@@ -15,6 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true     # SQL 쿼리 포멧팅
+        default_batch_fetch_size: 100 # N+1 문제 방지를 위한 배치 사이즈 설정
     defer-datasource-initialization: true  # 데이터 초기화 타이밍 조정
   
   # H2 콘솔 설정
@@ -22,11 +23,22 @@ spring:
     console:
       enabled: true          # 웹 콘솔 활성화
       path: /h2-console      # 콘솔 접속 경로
+      settings:
+        web-allow-others: false
   
   # SQL 초기화 설정
   sql:
     init:
       mode: always          # data.sql 항상 실행
+      encoding: utf-8
+
+  # JWT 설정
+jwt:
+  secret:  ${JWT_SECRET_KEY}
+  access-token:
+    validity: 3600000  # Access 토큰 유효기간 1시간
+  refresh-token:
+    validity: 604800000  # Refresh 토큰 유효기간 7일
 
 # 로깅설정
 logging:
@@ -34,7 +46,24 @@ logging:
     org.hibernate.SQL: debug            # SQL 로깅
     org.hibernate.type.descriptor.sql: trace  # SQL 파라미터 로깅
     com.yourpackage: debug              # 어플리케이션 로깅
+    org.springframework.security: debug
 
 # 서버 설정
 server:
   port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: desc
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match: /api/**
