@@ -43,7 +43,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+
+        // H2 콘솔은 프레임 사용
+        http.headers(headers -> headers.frameOptions(
+                frameOptions -> frameOptions.sameOrigin()
+        ));
+
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
@@ -58,14 +64,15 @@ public class SecurityConfig {
                                 "/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/webjars/**"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);  // 메서드 호출로 변경
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
 
-        return http.build();
     }
 
     @Bean
