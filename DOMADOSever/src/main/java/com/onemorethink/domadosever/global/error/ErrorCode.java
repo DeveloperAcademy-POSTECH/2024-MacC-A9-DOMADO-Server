@@ -35,6 +35,11 @@ public enum ErrorCode {
     ACCOUNT_WITHDRAWN("U006", "탈퇴한 계정입니다"),
     INVALID_USER_STATUS("U007", "잘못된 사용자 상태입니다"),
 
+    // Location Related Errors (L로 시작)
+    INVALID_COORDINATES("L001", "잘못된 좌표값입니다"),
+    INVALID_RADIUS("L002", "잘못된 반경값입니다"),
+    LOCATION_SERVICE_ERROR("L003", "위치 서비스 조회 중 오류가 발생했습니다"),
+
     // Role Related Errors (R로 시작)
     ROLE_NOT_FOUND("R001", "역할을 찾을 수 없습니다");
 

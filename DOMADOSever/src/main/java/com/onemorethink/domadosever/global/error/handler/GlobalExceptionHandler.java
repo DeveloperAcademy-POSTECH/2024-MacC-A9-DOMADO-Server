@@ -4,6 +4,7 @@ import com.onemorethink.domadosever.global.common.BaseResponse;
 import com.onemorethink.domadosever.global.error.ErrorCode;
 import com.onemorethink.domadosever.global.error.exception.AuthException;
 import com.onemorethink.domadosever.global.error.exception.BusinessException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,6 +42,13 @@ public class GlobalExceptionHandler {
         log.error("Validation Exception: {}", e.getMessage());
         ErrorCode errorCode = determineValidationErrorCode(e.getFieldErrors());
         return new BaseResponse<>(errorCode);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected BaseResponse<Object> handleConstraintViolationException(
+            ConstraintViolationException e) {
+        log.error("Constraint Violation Exception: {}", e.getMessage());
+        return new BaseResponse<>(ErrorCode.INVALID_INPUT_VALUE);
     }
 
     private ErrorCode determineValidationErrorCode(List<FieldError> fieldErrors) {
