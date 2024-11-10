@@ -31,6 +31,10 @@ public class Bike extends BaseEntity {
     @Column(nullable = false)
     private BikeStatus status = BikeStatus.PARKED;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HiBikeStatus hiBikeStatus = HiBikeStatus.NONE;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "home_hub_id", nullable = false)
     private Hub homeHub;
@@ -40,8 +44,6 @@ public class Bike extends BaseEntity {
     private Station currentStation;
 
     private Integer currentDockId;
-
-    private Boolean isHiBike = false;
 
     @Column(nullable = false)
     private Double currentLatitude;
