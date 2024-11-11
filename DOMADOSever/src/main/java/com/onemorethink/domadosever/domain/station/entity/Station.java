@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "stations")
@@ -38,6 +38,6 @@ public class Station extends BaseEntity {
     private Hub hub;
 
     @OneToMany(mappedBy = "currentStation")
-    private List<Bike> parkedBikes = new ArrayList<>();
+    private Set<Bike> parkedBikes = new HashSet<>();
     
 }
