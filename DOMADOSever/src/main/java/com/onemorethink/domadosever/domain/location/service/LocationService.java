@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,7 @@ public class LocationService {
     private List<HubLocationDto> convertToHubLocationDtos(List<Hub> hubs) {
         return hubs.stream()
                 .map(hub -> {
-                    List<StationLocationDto> stationDtos = convertToStationLocationDtos(hub.getStations());
+                    List<StationLocationDto> stationDtos = convertToStationLocationDtos(new ArrayList<>(hub.getStations()));
                     return HubLocationDto.from(hub, stationDtos);
                 })
                 .collect(Collectors.toList());
