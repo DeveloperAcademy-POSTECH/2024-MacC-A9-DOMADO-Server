@@ -62,19 +62,19 @@ public class LocationController {
     @GetMapping("/bikes")
     public BaseResponse<BikeLocationResponse> getBikeLocations(
             @Parameter(description = "검색 중심점 위도", example = "37.5665")
-            @RequestParam
+            @RequestParam(name = "latitude")
             @DecimalMin(value = "-90.0", message = "위도는 -90도 이상이어야 합니다")
             @DecimalMax(value = "90.0", message = "위도는 90도 이하여야 합니다")
             Double latitude,
 
             @Parameter(description = "검색 중심점 경도", example = "126.9780")
-            @RequestParam
+            @RequestParam(name = "longitude")
             @DecimalMin(value = "-180.0", message = "경도는 -180도 이상이어야 합니다")
             @DecimalMax(value = "180.0", message = "경도는 180도 이하여야 합니다")
             Double longitude,
 
             @Parameter(description = "검색 반경(km)", example = "2")
-            @RequestParam(defaultValue = "2")
+            @RequestParam(name = "radius", defaultValue = "2")
             @Positive(message = "반경은 양수여야 합니다")
             @Max(value = 10, message = "반경은 10km를 초과할 수 없습니다")
             Double radius
@@ -85,7 +85,7 @@ public class LocationController {
         validateLocationParameters(latitude, longitude, radius);
 
         BikeLocationResponse response = locationService.findBikeLocations(latitude, longitude, radius);
-        return new BaseResponse<>(response);
+        return BaseResponse.success(response);
     }
 
     private void validateLocationParameters(Double latitude, Double longitude, Double radius) {
