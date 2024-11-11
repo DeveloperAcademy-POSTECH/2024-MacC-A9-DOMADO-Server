@@ -40,6 +40,18 @@ public enum ErrorCode {
     INVALID_RADIUS("L002", "잘못된 반경값입니다"),
     LOCATION_SERVICE_ERROR("L003", "위치 서비스 조회 중 오류가 발생했습니다"),
 
+    // Bike Related Errors (B로 시작)
+    BIKE_NOT_FOUND("B001", "자전거를 찾을 수 없습니다"),
+    BIKE_NOT_AVAILABLE("B002", "현재 대여할 수 없는 자전거입니다"),
+    LOW_BATTERY("B003", "배터리가 부족한 자전거입니다"),
+
+    // Rental Related Errors (RT로 시작)
+    ACTIVE_RENTAL_EXISTS("RT001", "이미 대여중인 자전거가 있습니다"),
+    NO_PAYMENT_METHOD("RT002", "등록된 결제 수단이 없습니다"),
+
+    // MQTT Related Errors (M으로 시작)
+    MQTT_PUBLISH_FAILED("M001", "자전거 잠금 해제 명령 전송에 실패했습니다"),
+
     // Role Related Errors (R로 시작)
     ROLE_NOT_FOUND("R001", "역할을 찾을 수 없습니다");
 
