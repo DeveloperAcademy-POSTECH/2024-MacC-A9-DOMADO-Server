@@ -10,15 +10,14 @@ import java.util.List;
 
 @Repository
 public interface BikeRepository extends JpaRepository<Bike, Long> {
-    // 기본 JPQL 쿼리 (H2용)
     @Query("""
         SELECT b FROM Bike b
         LEFT JOIN FETCH b.homeHub
         WHERE b.status = 'TEMPORARY_LOCKED'
         AND b.hiBikeStatus = 'AVAILABLE_FOR_RENT'
         AND b.batteryLevel >= :minBatteryLevel
-        AND ABS(b.currentLatitude - :latitude) <= :radius / 111.0
-        AND ABS(b.currentLongitude - :longitude) <= :radius / (111.0 * COS(RADIANS(:latitude)))
+        AND ABS(CAST(b.currentLatitude AS double) - CAST(:latitude AS double)) <= (CAST(:radius AS double) / 111.0)
+        AND ABS(CAST(b.currentLongitude AS double) - CAST(:longitude AS double)) <= (CAST(:radius AS double) / (111.0 * COS(RADIANS(CAST(:latitude AS double)))))
         """)
     List<Bike> findAvailableHiBikesWithinRadius(
             @Param("latitude") Double latitude,

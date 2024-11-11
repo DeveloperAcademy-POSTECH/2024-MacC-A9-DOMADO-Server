@@ -11,15 +11,14 @@ import java.util.List;
 
 @Repository
 public interface HubRepository extends JpaRepository<Hub, Long> {
-    // 기본 JPQL 쿼리 (H2용)
     @Query("""
-        SELECT DISTINCT h FROM Hub h
-        JOIN FETCH h.stations s
-        LEFT JOIN FETCH s.parkedBikes b
-        LEFT JOIN FETCH b.homeHub
-        WHERE ABS(s.latitude - :latitude) <= :radius / 111.0
-        AND ABS(s.longitude - :longitude) <= :radius / (111.0 * COS(RADIANS(:latitude)))
-        """)
+    SELECT DISTINCT h FROM Hub h
+    JOIN FETCH h.stations s
+    LEFT JOIN FETCH s.parkedBikes b
+    LEFT JOIN FETCH b.homeHub
+    WHERE ABS(CAST(s.latitude AS double) - CAST(:latitude AS double)) <= (CAST(:radius AS double) / 111.0)
+    AND ABS(CAST(s.longitude AS double) - CAST(:longitude AS double)) <= (CAST(:radius AS double) / (111.0 * COS(RADIANS(CAST(:latitude AS double)))))
+    """)
     List<Hub> findHubsWithinRadius(
             @Param("latitude") Double latitude,
             @Param("longitude") Double longitude,
