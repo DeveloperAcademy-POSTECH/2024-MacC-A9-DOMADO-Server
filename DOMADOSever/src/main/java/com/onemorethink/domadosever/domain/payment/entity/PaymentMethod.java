@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "payment_methods")
@@ -32,7 +32,7 @@ public class PaymentMethod extends BaseEntity {
     private boolean isDefault = false;
 
     @OneToMany(mappedBy = "paymentMethod")
-    private List<Payment> payments = new ArrayList<>();
+    private Set<Payment> payments = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
