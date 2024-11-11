@@ -70,7 +70,7 @@ public class AuthController {
             RegisterRequest request
     ) {
         authenticationService.register(request);
-        return new BaseResponse<>(null);
+        return BaseResponse.success();
     }
 
     @Operation(
@@ -101,7 +101,7 @@ public class AuthController {
         String clientIp = extractClientIp(httpRequest);
 
         TokenResponse tokenResponse = authenticationService.login(request, userAgent, clientIp);
-        return new BaseResponse<>(tokenResponse);
+        return BaseResponse.success(tokenResponse);
     }
 
     @Operation(
@@ -137,7 +137,7 @@ public class AuthController {
                 userAgent,
                 clientIp
         );
-        return new BaseResponse<>(tokenResponse);
+        return BaseResponse.success(tokenResponse);
     }
 
     @Operation(
@@ -164,7 +164,7 @@ public class AuthController {
             LogoutRequest request
     ) {
         authenticationService.logout(request.getRefreshToken());
-        return new BaseResponse<>(null);
+        return BaseResponse.success();
     }
 
     @Operation(
@@ -195,7 +195,7 @@ public class AuthController {
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         UserResponse userResponse = authenticationService.getCurrentUser(userDetails.getUsername());
-        return new BaseResponse<>(userResponse);
+        return BaseResponse.success(userResponse);
     }
 
     private String extractClientIp(HttpServletRequest request) {

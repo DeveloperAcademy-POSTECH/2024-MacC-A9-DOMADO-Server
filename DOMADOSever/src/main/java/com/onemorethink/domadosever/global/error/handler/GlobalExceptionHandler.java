@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -21,19 +20,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected BaseResponse<Object> handleException(Exception e) {
         log.error("Internal Server Error", e);
-        return new BaseResponse<>(ErrorCode.INTERNAL_SERVER_ERROR);
+        return BaseResponse.failure(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(BusinessException.class)
     protected BaseResponse<Object> handleBusinessException(BusinessException e) {
         log.error("Business Exception: {}", e.getMessage());
-        return new BaseResponse<>(e.getErrorCode());
+        return BaseResponse.failure(e.getErrorCode());
     }
 
     @ExceptionHandler(AuthException.class)
     protected BaseResponse<Object> handleAuthException(AuthException e) {
         log.error("Auth Exception: {}", e.getMessage());
-        return new BaseResponse<>(e.getErrorCode());
+        return BaseResponse.failure(e.getErrorCode());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -41,14 +40,14 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException e) {
         log.error("Validation Exception: {}", e.getMessage());
         ErrorCode errorCode = determineValidationErrorCode(e.getFieldErrors());
-        return new BaseResponse<>(errorCode);
+        return BaseResponse.failure(errorCode);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected BaseResponse<Object> handleConstraintViolationException(
             ConstraintViolationException e) {
         log.error("Constraint Violation Exception: {}", e.getMessage());
-        return new BaseResponse<>(ErrorCode.INVALID_INPUT_VALUE);
+        return BaseResponse.failure(ErrorCode.INVALID_INPUT_VALUE);
     }
 
     private ErrorCode determineValidationErrorCode(List<FieldError> fieldErrors) {
