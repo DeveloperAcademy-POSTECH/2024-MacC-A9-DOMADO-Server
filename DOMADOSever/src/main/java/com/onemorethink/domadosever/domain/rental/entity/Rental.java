@@ -6,9 +6,8 @@ import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "rentals")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Rental extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
