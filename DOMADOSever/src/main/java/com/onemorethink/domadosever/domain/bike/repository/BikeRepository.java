@@ -1,12 +1,14 @@
 package com.onemorethink.domadosever.domain.bike.repository;
 
 import com.onemorethink.domadosever.domain.bike.entity.Bike;
+import com.onemorethink.domadosever.domain.user.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BikeRepository extends JpaRepository<Bike, Long> {
@@ -25,4 +27,6 @@ public interface BikeRepository extends JpaRepository<Bike, Long> {
             @Param("radius") Double radiusInKm,
             @Param("minBatteryLevel") Integer minBatteryLevel
     );
+
+    Optional<Bike> findByQrCode(String qrCode);
 }
