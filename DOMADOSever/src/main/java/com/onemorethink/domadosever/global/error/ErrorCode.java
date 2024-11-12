@@ -48,6 +48,8 @@ public enum ErrorCode {
     // Rental Related Errors (RT로 시작)
     ACTIVE_RENTAL_EXISTS("RT001", "이미 대여중인 자전거가 있습니다"),
     NO_PAYMENT_METHOD("RT002", "등록된 결제 수단이 없습니다"),
+    RENTAL_NOT_FOUND("RT003", "해당 대여내역을 찾을 수 없습니다."),
+
 
     // Payment Related Errors (P로 시작)
     PAYMENT_METHOD_NOT_FOUND("P001", "결제 수단을 찾을 수 없습니다"),
@@ -69,6 +71,11 @@ public enum ErrorCode {
     MONTHLY_PAYMENT_LIMIT_EXCEEDED("P017", "월간 결제 한도를 초과했습니다"),
     PAYMENT_TIMEOUT("P018", "결제 시간이 초과되었습니다"),
     BIN_LOAD_ERROR("P019", "BIN 정보 로딩 중 오류가 발생했습니다"),
+
+    RENTAL_NOT_OWNED("RP001", "본인의 대여 내역만 조작할 수 있습니다"),
+    RENTAL_NOT_IN_PROGRESS("RP002", "진행 중인 대여가 아닙니다"),
+    BIKE_ALREADY_LOCKED("RP003", "이미 잠금 상태인 자전거입니다"),
+    MAX_PAUSE_TIME_EXCEEDED("RP004", "최대 정지 가능 시간을 초과했습니다"),
 
     // MQTT Related Errors (M으로 시작)
     MQTT_PUBLISH_FAILED("M001", "자전거 잠금 해제 명령 전송에 실패했습니다"),
