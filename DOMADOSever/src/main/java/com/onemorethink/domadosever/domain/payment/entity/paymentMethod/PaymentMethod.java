@@ -1,5 +1,6 @@
-package com.onemorethink.domadosever.domain.payment.entity;
+package com.onemorethink.domadosever.domain.payment.entity.paymentMethod;
 
+import com.onemorethink.domadosever.domain.payment.entity.Payment;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -37,5 +38,17 @@ public class PaymentMethod extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentMethodStatus status = PaymentMethodStatus.ACTIVE;
+
+    @Column(nullable = false)
+    private String cardHolderName;
+
+    @Column(nullable = false)
+    private String expiryMonth;
+
+    @Column(nullable = false)
+    private String expiryYear;
+
+    // 결제 수단 별칭 (예: "내 신한카드")
+    private String alias;
 
 }

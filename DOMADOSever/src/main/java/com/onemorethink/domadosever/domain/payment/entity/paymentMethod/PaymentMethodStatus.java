@@ -1,4 +1,4 @@
-package com.onemorethink.domadosever.domain.payment.entity;
+package com.onemorethink.domadosever.domain.payment.entity.paymentMethod;
 
 public enum PaymentMethodStatus {
     ACTIVE("사용가능"),
