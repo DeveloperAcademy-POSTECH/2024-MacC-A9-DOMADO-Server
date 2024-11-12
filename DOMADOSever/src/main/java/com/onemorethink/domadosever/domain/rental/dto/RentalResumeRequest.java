@@ -8,10 +8,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "자전거 일시잠금 요청")
+@Schema(description = "자전거 일시잠금 해제 요청")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RentalPauseRequest {
+public class RentalResumeRequest {
     @Schema(
             description = "현재 위치 위도",
             example = "37.5665",
