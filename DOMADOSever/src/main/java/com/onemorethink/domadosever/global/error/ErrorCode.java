@@ -75,7 +75,10 @@ public enum ErrorCode {
     RENTAL_NOT_OWNED("RP001", "본인의 대여 내역만 조작할 수 있습니다"),
     RENTAL_NOT_IN_PROGRESS("RP002", "진행 중인 대여가 아닙니다"),
     BIKE_ALREADY_LOCKED("RP003", "이미 잠금 상태인 자전거입니다"),
-    MAX_PAUSE_TIME_EXCEEDED("RP004", "최대 정지 가능 시간을 초과했습니다"),
+
+    // Resume Related Errors (RR로 시작)
+    BIKE_NOT_LOCKED("RR001", "잠금 상태가 아닌 자전거입니다"),
+    BIKE_NOT_IN_PAUSE("RR002", "일시정지 상태가 아닙니다"),
 
     // MQTT Related Errors (M으로 시작)
     MQTT_PUBLISH_FAILED("M001", "자전거 잠금 해제 명령 전송에 실패했습니다"),
