@@ -7,9 +7,7 @@ import com.onemorethink.domadosever.domain.bike.entity.HiBikeStatus;
 import com.onemorethink.domadosever.domain.bike.repository.BikeRepository;
 import com.onemorethink.domadosever.domain.payment.entity.paymentMethod.PaymentMethodStatus;
 import com.onemorethink.domadosever.domain.payment.repository.PaymentMethodRepository;
-import com.onemorethink.domadosever.domain.rental.dto.RentalPauseRequest;
-import com.onemorethink.domadosever.domain.rental.dto.RentalPauseResponse;
-import com.onemorethink.domadosever.domain.rental.dto.RentalResponse;
+import com.onemorethink.domadosever.domain.rental.dto.*;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.rental.entity.RentalStatus;
 import com.onemorethink.domadosever.domain.rental.repository.RentalRepository;
@@ -161,14 +159,15 @@ public class RentalService {
         // 3. 정지 가능 상태 검증 - 대여가 진행중이며 현재 자전거가 잠금 상태가 아닌지 확인
         validatePauseAvailable(rental);
 
-        // 4. 자전거 상태 업데이트
+        // 4. MQTT로 잠금 명령 전송
+        // sendLockCommand(bike);
+
+        // 5. 자전거 상태 업데이트
         Bike bike = rental.getBike();
         updateBikeLocation(bike, request.getLatitude(), request.getLongitude());
         bike.setStatus(BikeStatus.TEMPORARY_LOCKED);
         bikeRepository.save(bike);
 
-        // 5. MQTT로 잠금 명령 전송
-        // sendLockCommand(bike);
 
         // 6. 대여 정보 업데이트
         rental.setLastPauseStartTime(LocalDateTime.now());
@@ -243,6 +242,79 @@ public class RentalService {
 //        String message = String.format("""
 //            {
 //                "command": "lock",
+//                "bikeId": "%s",
+//                "timestamp": "%s"
+//            }
+//            """,
+//                bike.getId(),
+//                LocalDateTime.now()
+//        );
+//
+//        mqttService.publish(topic, message);
+//    }
+
+    public RentalResumeResponse resumeBike(String userEmail, Integer rentalId, RentalResumeRequest request) {
+        // 1. 대여 정보 조회 및 검증
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RENTAL_NOT_FOUND));
+
+        // 2. 사용자 검증
+        validateRentalOwnership(rental, userEmail);
+
+        // 3. 재개 가능 상태 검증
+        validateResumeAvailable(rental);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 4. 일시정지 시간 계산 및 업데이트
+        int pauseDuration = calculatePauseDuration(rental, now);
+        updatePauseTime(rental, now);
+
+        // 5. MQTT로 잠금 해제 명령 전송
+        // sendUnlockCommand(bike);
+
+        // 6. 자전거 상태 업데이트
+        Bike bike = rental.getBike();
+        updateBikeLocation(bike, request.getLatitude(), request.getLongitude());
+        bike.setStatus(BikeStatus.IN_USE);
+        bikeRepository.save(bike);
+
+        return RentalResumeResponse.builder()
+                .rentalId(rental.getId())
+                .bikeStatus(bike.getStatus())
+                .resumeTime(now)
+                .pauseMinutes(pauseDuration)
+                .message("자전거 잠금이 해제되었습니다.")
+                .build();
+    }
+
+    private void validateResumeAvailable(Rental rental) {
+        if (rental.getStatus() != RentalStatus.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.RENTAL_NOT_IN_PROGRESS);
+        }
+
+        if (rental.getBike().getStatus() != BikeStatus.TEMPORARY_LOCKED) {
+            throw new BusinessException(ErrorCode.BIKE_NOT_LOCKED);
+        }
+
+        if (rental.getLastPauseStartTime() == null) {
+            throw new BusinessException(ErrorCode.BIKE_NOT_IN_PAUSE);
+        }
+    }
+
+    private int calculatePauseDuration(Rental rental, LocalDateTime endTime) {
+        LocalDateTime startTime = rental.getLastPauseStartTime();
+        if (startTime == null) {
+            return 0;
+        }
+        return (int) Duration.between(startTime, endTime).toMinutes();
+    }
+
+//    private void sendUnlockCommand(Bike bike) {
+//        String topic = "bikes/" + bike.getId() + "/command";
+//        String message = String.format("""
+//            {
+//                "command": "unlock",
 //                "bikeId": "%s",
 //                "timestamp": "%s"
 //            }
