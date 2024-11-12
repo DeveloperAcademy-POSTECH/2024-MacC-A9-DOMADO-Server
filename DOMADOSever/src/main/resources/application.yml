@@ -44,9 +44,9 @@ jwt:
 logging:
   level:
     org.hibernate.SQL: debug            # SQL 로깅
-    org.hibernate.type.descriptor.sql: trace  # SQL 파라미터 로깅 # 어플리케이션 로깅
+    org.hibernate.type.descriptor.sql: trace  # SQL 파라미터 로깅
     org.springframework.security: debug
-    com.onemorethink.domadosever.global: debug
+    com.onemorethink.domadosever.global: debug  # 어플리케이션 로깅
 
 # 서버 설정
 server:

@@ -1,6 +1,7 @@
 package com.onemorethink.domadosever.domain.payment.entity;
 
 import com.onemorethink.domadosever.domain.coupon.entity.Coupon;
+import com.onemorethink.domadosever.domain.payment.entity.paymentMethod.PaymentMethod;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
