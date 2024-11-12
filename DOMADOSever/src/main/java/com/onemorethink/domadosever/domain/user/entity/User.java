@@ -2,13 +2,14 @@ package com.onemorethink.domadosever.domain.user.entity;
 
 import com.onemorethink.domadosever.domain.coupon.entity.Coupon;
 import com.onemorethink.domadosever.domain.coupon.entity.Stamp;
-import com.onemorethink.domadosever.domain.payment.entity.PaymentMethod;
+import com.onemorethink.domadosever.domain.payment.entity.paymentMethod.PaymentMethod;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class User extends BaseEntity {
     private boolean hasRegisteredPayments = false;
 
     @OneToMany(mappedBy = "user")
-    private List<PaymentMethod> paymentMethods = new ArrayList<>();
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Stamp> stamps = new ArrayList<>();
