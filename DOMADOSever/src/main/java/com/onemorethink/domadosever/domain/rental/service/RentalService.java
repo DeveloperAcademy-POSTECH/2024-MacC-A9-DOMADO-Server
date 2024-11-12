@@ -5,7 +5,7 @@ import com.onemorethink.domadosever.domain.bike.entity.Bike;
 import com.onemorethink.domadosever.domain.bike.entity.BikeStatus;
 import com.onemorethink.domadosever.domain.bike.entity.HiBikeStatus;
 import com.onemorethink.domadosever.domain.bike.repository.BikeRepository;
-import com.onemorethink.domadosever.domain.payment.entity.PaymentMethodStatus;
+import com.onemorethink.domadosever.domain.payment.entity.paymentMethod.PaymentMethodStatus;
 import com.onemorethink.domadosever.domain.payment.repository.PaymentMethodRepository;
 import com.onemorethink.domadosever.domain.rental.dto.RentalResponse;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
