@@ -7,6 +7,8 @@ import com.onemorethink.domadosever.domain.bike.entity.HiBikeStatus;
 import com.onemorethink.domadosever.domain.bike.repository.BikeRepository;
 import com.onemorethink.domadosever.domain.payment.entity.paymentMethod.PaymentMethodStatus;
 import com.onemorethink.domadosever.domain.payment.repository.PaymentMethodRepository;
+import com.onemorethink.domadosever.domain.rental.dto.RentalPauseRequest;
+import com.onemorethink.domadosever.domain.rental.dto.RentalPauseResponse;
 import com.onemorethink.domadosever.domain.rental.dto.RentalResponse;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.rental.entity.RentalStatus;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Service
@@ -146,5 +149,109 @@ public class RentalService {
         bike.setStatus(BikeStatus.IN_USE);
         bikeRepository.save(bike);
     }
+
+    public RentalPauseResponse pauseBike(String userEmail, Integer rentalId, RentalPauseRequest request) {
+        // 1. 대여 정보 조회 및 검증 - 해당 대여가 존재하는지 확인
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RENTAL_NOT_FOUND));
+
+        // 2. 사용자 검증 - 해당 대여의 소유자가 정지 요청자와 동일한지 확인
+        validateRentalOwnership(rental, userEmail);
+
+        // 3. 정지 가능 상태 검증 - 대여가 진행중이며 현재 자전거가 잠금 상태가 아닌지 확인
+        validatePauseAvailable(rental);
+
+        // 4. 자전거 상태 업데이트
+        Bike bike = rental.getBike();
+        updateBikeLocation(bike, request.getLatitude(), request.getLongitude());
+        bike.setStatus(BikeStatus.TEMPORARY_LOCKED);
+        bikeRepository.save(bike);
+
+        // 5. MQTT로 잠금 명령 전송
+        // sendLockCommand(bike);
+
+        // 6. 대여 정보 업데이트
+        rental.setLastPauseStartTime(LocalDateTime.now());
+        rentalRepository.save(rental);
+
+        return RentalPauseResponse.builder()
+                .rentalId(rental.getId())
+                .bikeStatus(bike.getStatus())
+                .pauseTime(LocalDateTime.now())
+                .totalPauseMinutes(rental.getPauseMinutes())
+                .message("자전거가 성공적으로 일시 정지되었습니다.")
+                .build();
+    }
+
+    private void validateRentalOwnership(Rental rental, String userEmail) {
+        if (!rental.getUser().getEmail().equals(userEmail)) {
+            throw new BusinessException(ErrorCode.RENTAL_NOT_OWNED);
+        }
+    }
+
+    private void validatePauseAvailable(Rental rental) {
+        if (rental.getStatus() != RentalStatus.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.RENTAL_NOT_IN_PROGRESS);
+        }
+
+        if (rental.getBike().getStatus() == BikeStatus.TEMPORARY_LOCKED) {
+            throw new BusinessException(ErrorCode.BIKE_ALREADY_LOCKED);
+        }
+
+    }
+
+    private void updateBikeLocation(Bike bike, Double latitude, Double longitude) {
+        bike.setCurrentLatitude(latitude);
+        bike.setCurrentLongitude(longitude);
+    }
+
+    // 일시정지 해제시 호출되는 메소드
+    public void updatePauseTime(Rental rental, LocalDateTime endTime) {
+        LocalDateTime startTime = rental.getLastPauseStartTime();
+        if (startTime != null) {
+            int currentPauseMinutes = rental.getPauseMinutes();
+            int additionalMinutes = (int) Duration.between(startTime, endTime).toMinutes();
+            rental.setPauseMinutes(currentPauseMinutes + additionalMinutes);
+            rental.setLastPauseStartTime(null);
+        }
+    }
+
+    // 실제 이용 시간 계산 (과금 등에 사용)
+    public int calculateActualUsageMinutes(Rental rental) {
+        LocalDateTime endTime = rental.getEndTime() != null ?
+                rental.getEndTime() : LocalDateTime.now();
+
+        int totalMinutes = (int) Duration.between(
+                rental.getStartTime(),
+                endTime
+        ).toMinutes();
+
+        // 현재 진행 중인 일시정지 시간도 계산에 포함
+        int currentPauseMinutes = 0;
+        if (rental.getLastPauseStartTime() != null) {
+            currentPauseMinutes = (int) Duration.between(
+                    rental.getLastPauseStartTime(),
+                    LocalDateTime.now()
+            ).toMinutes();
+        }
+
+        return totalMinutes - (rental.getPauseMinutes() + currentPauseMinutes);
+    }
+
+//    private void sendLockCommand(Bike bike) {
+//        String topic = "bikes/" + bike.getId() + "/command";
+//        String message = String.format("""
+//            {
+//                "command": "lock",
+//                "bikeId": "%s",
+//                "timestamp": "%s"
+//            }
+//            """,
+//                bike.getId(),
+//                LocalDateTime.now()
+//        );
+//
+//        mqttService.publish(topic, message);
+//    }
 
 }
