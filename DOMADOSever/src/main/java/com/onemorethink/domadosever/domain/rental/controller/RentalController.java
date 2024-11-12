@@ -1,5 +1,7 @@
 package com.onemorethink.domadosever.domain.rental.controller;
 
+import com.onemorethink.domadosever.domain.rental.dto.RentalPauseRequest;
+import com.onemorethink.domadosever.domain.rental.dto.RentalPauseResponse;
 import com.onemorethink.domadosever.domain.rental.dto.RentalResponse;
 import com.onemorethink.domadosever.domain.rental.service.RentalService;
 import com.onemorethink.domadosever.global.common.BaseResponse;
@@ -10,15 +12,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -83,6 +83,63 @@ public class RentalController {
         log.debug("Rental request - email: {}, qrCode: {}", email, qrCode);
 
         RentalResponse response = rentalService.rentBikeByEmail(email, qrCode);
+        return BaseResponse.success(response);
+    }
+
+    @Operation(
+            summary = "자전거 대여 일시정지",
+            description = """
+                    진행 중인 대여를 일시정지합니다.
+                    - 사용자 인증 정보를 확인합니다.
+                    - 해당 대여 건에 대한 권한을 확인합니다.
+                    - 현재 위치 정보를 기반으로 주차 가능 구역인지 확인합니다.
+                    - 대여 시간을 계산하여 중간 정산을 진행합니다.
+                    """
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "일시정지 성공",
+                    content = @Content(schema = @Schema(implementation = RentalPauseResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 요청 (주차 불가 구역 등)",
+                    content = @Content(schema = @Schema(implementation = BaseResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패",
+                    content = @Content(schema = @Schema(implementation = BaseResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "권한 없음 (본인의 대여가 아닌 경우)",
+                    content = @Content(schema = @Schema(implementation = BaseResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "대여 정보를 찾을 수 없음",
+                    content = @Content(schema = @Schema(implementation = BaseResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "서버 오류",
+                    content = @Content(schema = @Schema(implementation = BaseResponse.class))
+            )
+    })
+    @Parameter(name = "rentalId", description = "Rental ID", required = true)
+    @PostMapping("/{rentalId}/pause")
+    public BaseResponse<RentalPauseResponse> pauseBike(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("rentalId")Integer rentalId,
+            @Valid @RequestBody RentalPauseRequest request
+    ) {
+        RentalPauseResponse response = rentalService.pauseBike(
+                userDetails.getUsername(),
+                rentalId,
+                request
+        );
         return BaseResponse.success(response);
     }
 }
