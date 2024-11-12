@@ -40,6 +40,7 @@ public class Rental extends BaseEntity {
 
     @PositiveOrZero
     private Integer pauseMinutes = 0;
+    private LocalDateTime lastPauseStartTime;  // 마지막 일시정지 시작 시간
 
     @OneToOne(mappedBy = "rental", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
