@@ -49,6 +49,27 @@ public enum ErrorCode {
     ACTIVE_RENTAL_EXISTS("RT001", "이미 대여중인 자전거가 있습니다"),
     NO_PAYMENT_METHOD("RT002", "등록된 결제 수단이 없습니다"),
 
+    // Payment Related Errors (P로 시작)
+    PAYMENT_METHOD_NOT_FOUND("P001", "결제 수단을 찾을 수 없습니다"),
+    INVALID_CARD_NUMBER("P002", "유효하지 않은 카드 번호입니다"),
+    INVALID_CARD_CVV("P003", "유효하지 않은 보안코드입니다"),
+    EXPIRED_CARD("P004", "만료된 카드입니다"),
+    PAYMENT_PROCESSING_FAILED("P005", "결제 처리 중 오류가 발생했습니다"),
+    INVALID_PAYMENT_AMOUNT("P006", "유효하지 않은 결제 금액입니다"),
+    INACTIVE_PAYMENT_METHOD("P007", "비활성화된 결제 수단입니다"),
+    PAYMENT_METHOD_LIMIT_EXCEEDED("P008", "결제 수단 등록 한도를 초과했습니다"),
+    DUPLICATE_PAYMENT("P009", "중복된 결제가 감지되었습니다"),
+    PAYMENT_LIMIT_EXCEEDED("P010", "결제 한도를 초과했습니다"),
+    INVALID_CARD_BIN("P011", "등록되지 않은 BIN 번호입니다"),
+    DISCONTINUED_CARD_BIN("P012", "사용이 중지된 카드입니다"),
+    INVALID_CARD_FORMAT("P013", "카드 번호 형식이 올바르지 않습니다"),
+    INVALID_CARD_CHECKSUM("P014", "카드 번호 검증에 실패했습니다"),
+    INVALID_CVV_FORMAT("P015", "보안코드(CVV) 형식이 올바르지 않습니다"),
+    DAILY_PAYMENT_LIMIT_EXCEEDED("P016", "일일 결제 한도를 초과했습니다"),
+    MONTHLY_PAYMENT_LIMIT_EXCEEDED("P017", "월간 결제 한도를 초과했습니다"),
+    PAYMENT_TIMEOUT("P018", "결제 시간이 초과되었습니다"),
+    BIN_LOAD_ERROR("P019", "BIN 정보 로딩 중 오류가 발생했습니다"),
+
     // MQTT Related Errors (M으로 시작)
     MQTT_PUBLISH_FAILED("M001", "자전거 잠금 해제 명령 전송에 실패했습니다"),
 
