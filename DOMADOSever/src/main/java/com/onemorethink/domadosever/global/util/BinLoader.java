@@ -27,7 +27,8 @@ public class BinLoader {
             initializeIssuerCodes();
             initializeBinInfo();
 
-            printLoadedBins();
+            // printLoadedBins(); 로드된 BIN 콘솔에 출력
+            
         } catch (IOException e) {
             log.error("Failed to initialize BIN loader", e);
             throw new RuntimeException("Failed to initialize BIN loader", e);
