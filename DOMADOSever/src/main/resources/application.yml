@@ -1,54 +1,14 @@
 spring:
-  # 데이터베이스 연결 설정
-  datasource:
-    url: jdbc:h2:mem:testdb  # 메모리 DB 모드
-    # url: jdbc:h2:file:./data/testdb  # 파일 DB 모드 (데이터 유지하고 싶은 경우)
-    username: sa  # 기본 사용자명
-    password:     # 기본 비밀번호 없음
-    driver-class-name: org.h2.Driver
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local} # 기본값은 local
 
-  # JPA 설정
-  jpa:
-    hibernate:
-      ddl-auto: create-drop  # 시작시 테이블 생성, 종료시 삭제
-    show-sql: true           # SQL 쿼리 콘솔 출력
-    properties:
-      hibernate:
-        format_sql: true     # SQL 쿼리 포멧팅
-        default_batch_fetch_size: 100 # N+1 문제 방지를 위한 배치 사이즈 설정
-    defer-datasource-initialization: true  # 데이터 초기화 타이밍 조정
-  
-  # H2 콘솔 설정
-  h2:
-    console:
-      enabled: true          # 웹 콘솔 활성화
-      path: /h2-console      # 콘솔 접속 경로
-      settings:
-        web-allow-others: false
-  
-  # SQL 초기화 설정
-  sql:
-    init:
-      mode: always          # data.sql 항상 실행
-      encoding: utf-8
-
-  # JWT 설정
 jwt:
-  secret:  ${JWT_SECRET_KEY}
+  secret: ${JWT_SECRET_KEY}
   access-token:
-    validity: 3600000  # Access 토큰 유효기간 1시간
+    validity: 3600000
   refresh-token:
-    validity: 604800000  # Refresh 토큰 유효기간 7일
+    validity: 604800000
 
-# 로깅설정
-logging:
-  level:
-    org.hibernate.SQL: debug            # SQL 로깅
-    org.hibernate.type.descriptor.sql: trace  # SQL 파라미터 로깅
-    org.springframework.security: debug
-    com.onemorethink.domadosever.global: debug  # 어플리케이션 로깅
-
-# 서버 설정
 server:
   port: 8080
 
