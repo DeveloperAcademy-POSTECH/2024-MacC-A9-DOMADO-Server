@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local} # 기본값은 local
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access-token:
+    validity: 3600000
+  refresh-token:
+    validity: 604800000
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    groups:
+      enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: desc
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match: /api/**
