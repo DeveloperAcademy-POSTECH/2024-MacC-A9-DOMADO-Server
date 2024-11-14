@@ -1,0 +1,32 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/your_db_name?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: your_username  # Docker 설정의 MYSQL_USER 값
+    password: your_password  # Docker 설정의 MYSQL_PASSWORD 값
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        dialect: org.hibernate.dialect.MySQLDialect  # MySQL8Dialect는 deprecated 되었으므로 수정
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      encoding: utf-8
+
+logging:
+  level:
+    org.hibernate.SQL: info
+    org.hibernate.type.descriptor.sql: info
+    org.springframework.security: info
+    com.onemorethink.domadosever.global: info
