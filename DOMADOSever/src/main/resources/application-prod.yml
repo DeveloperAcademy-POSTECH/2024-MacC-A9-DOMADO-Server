@@ -1,0 +1,39 @@
+# application-prod.yml (운영 환경)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 운영환경에서는 validate 모드 사용
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always  # 운영환경에서는 초기 데이터 생성 비활성화
+
+logging:
+  level:
+    org.hibernate.SQL: error
+    org.hibernate.type.descriptor.sql: error
+    org.springframework.security: error
+    com.onemorethink.domadosever.global: info
+  file:
+    name: ./logs/application.log  # 운영환경 로그 파일 저장
