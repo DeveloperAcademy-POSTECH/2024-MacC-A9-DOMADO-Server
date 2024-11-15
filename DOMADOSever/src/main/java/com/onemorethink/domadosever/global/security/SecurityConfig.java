@@ -79,8 +79,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://3.38.15.129:8080"
+                // 배포된 웹 사이트에서 접근시 필요 (웹 브라우저로 접근시에만 설정 필요
+                "http://localhost:3000"
         ));
         // 프론트엔드 URL
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
