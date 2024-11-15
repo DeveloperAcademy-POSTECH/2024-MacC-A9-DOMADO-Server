@@ -16,24 +16,27 @@ spring:
       max-lifetime: 1200000
 
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect  # 추가
     hibernate:
-      ddl-auto: create-drop # 운영환경에서는 validate 모드 사용
-    show-sql: false
+      ddl-auto: create-drop
+    show-sql: true  # 변경
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true  # 변경
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 
   sql:
     init:
-      mode: always  # 운영환경에서는 초기 데이터 생성 비활성화
+      mode: always
+      encoding: UTF-8  # 추가 (한글 데이터 때문에)
 
 logging:
   level:
-    org.hibernate.SQL: error
-    org.hibernate.type.descriptor.sql: error
-    org.springframework.security: error
-    com.onemorethink.domadosever.global: info
+    root: INFO  # 추가
+    org.hibernate.SQL: DEBUG  # 변경
+    org.hibernate.type.descriptor.sql: TRACE  # 변경
+    org.springframework.security: DEBUG  # 변경
+    com.onemorethink.domadosever: DEBUG  # 변경
   file:
-    name: ./logs/application.log  # 운영환경 로그 파일 저장
+    name: ./logs/application.log
