@@ -30,24 +30,19 @@ public class RentalService {
     private final UserRepository userRepository;
     private final RentalRepository  rentalRepository;
     private final PaymentMethodRepository paymentMethodRepository;
+
     // TODO: MQTTService 구현 및 필드 추가
 
 
-    public RentalResponse rentBikeByEmail(String email, String qrCode) {
-        // 1-1. 사용자 조회 - 해당 사용자가 등록되어 있는지 확인
+    public RentalResponse rentBike(String email, String qrCode) {
 
+        // 1-1. 사용자 조회 - 해당 사용자가 등록되어 있는지 확인
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-        return rentBike(user, qrCode);
-    }
-
-    private RentalResponse rentBike(User user, String qrCode) {
-
         // 1-2. 사용자 상태 검증 - 해당 사용자가 대여 서비스를 이용 가능한지 확인
         validateUserStatus(user);
 
-        // 2-1. 자전거 조회 - 해당 자전가 등록되어 있는지 확인
+        // 2-1. 자전거 조회 - 해당 자전거가 등록되어 있는지 확인
         Bike bike = bikeRepository.findByQrCode(qrCode)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BIKE_NOT_FOUND));
 
@@ -59,6 +54,11 @@ public class RentalService {
 
         // 4. 사용자가 현재 진행중인 대여가 있는지 확인
         validateNoActiveRental(user);
+
+        // + HiBike 자전거인 경우 이전 사용자 반납 처리
+        if (bike.getHiBikeStatus() == HiBikeStatus.AVAILABLE_FOR_RENT) {
+            // handleHiBikeTransfer(bike);
+        }
 
         // 5. 대여 생성
         Rental rental = createRental(user, bike);

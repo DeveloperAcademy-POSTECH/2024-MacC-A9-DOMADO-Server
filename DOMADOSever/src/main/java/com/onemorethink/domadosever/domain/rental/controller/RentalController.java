@@ -80,7 +80,7 @@ public class RentalController {
         String email = userDetails.getUsername();
         log.debug("Rental request - email: {}, qrCode: {}", email, qrCode);
 
-        RentalResponse response = rentalService.rentBikeByEmail(email, qrCode);
+        RentalResponse response = rentalService.rentBike(email, qrCode);
         return BaseResponse.success(response);
     }
 
