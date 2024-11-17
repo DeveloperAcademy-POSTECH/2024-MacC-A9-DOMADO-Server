@@ -52,4 +52,13 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("UPDATE Coupon c SET c.status = 'EXPIRED' " +
             "WHERE c.status = 'ACTIVE' AND c.expireDate <= :now")
     void updateExpiredCoupons(@Param("now") LocalDateTime now);
+
+    // 특정 사용자의 유효한 쿠폰 조회
+    Optional<Coupon> findByIdAndUserAndStatusAndExpireDateAfter(
+            Long id,
+            User user,
+            CouponStatus status,
+            LocalDateTime expireDate
+    );
+
 }
