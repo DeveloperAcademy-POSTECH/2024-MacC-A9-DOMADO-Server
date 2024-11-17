@@ -5,6 +5,7 @@ import com.onemorethink.domadosever.domain.rental.dto.HiBikeResponse;
 import com.onemorethink.domadosever.domain.rental.service.HiBikeService;
 import com.onemorethink.domadosever.global.common.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,9 +53,10 @@ public class HiBikeController {
             )
     })
     @PostMapping
+    @Parameter(name = "rentalId", description = "Rental ID", required = true)
     public BaseResponse<HiBikeResponse> makeHiBike(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Integer rentalId,
+            @PathVariable("rentalId") Integer rentalId,
             @Valid @RequestBody HiBikeRequest request
     ) {
         String email = userDetails.getUsername();
@@ -89,10 +91,11 @@ public class HiBikeController {
                     content = @Content(schema = @Schema(implementation = BaseResponse.class))
             )
     })
-    @DeleteMapping
+    @PatchMapping("/cancel")
+    @Parameter(name = "rentalId", description = "Rental ID", required = true)
     public BaseResponse<HiBikeResponse> cancelHiBike(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Integer rentalId
+            @PathVariable("rentalId") Integer rentalId
     ) {
         String email = userDetails.getUsername();
         log.debug("HiBike cancel request - email: {}, rentalId: {}", email, rentalId);
