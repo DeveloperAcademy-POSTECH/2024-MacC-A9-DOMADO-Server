@@ -84,7 +84,11 @@ public enum ErrorCode {
     MQTT_PUBLISH_FAILED("M001", "자전거 잠금 해제 명령 전송에 실패했습니다"),
 
     // Role Related Errors (R로 시작)
-    ROLE_NOT_FOUND("R001", "역할을 찾을 수 없습니다");
+    ROLE_NOT_FOUND("R001", "역할을 찾을 수 없습니다"),
+
+    // HiBike Related Errors (HB로 시작)
+    ALREADY_HIBIKE("HB001", "이미 HiBike 상태입니다"),
+    NOT_HIBIKE("HB002", "HiBike 상태가 아닙니다");
 
     private final String code;
     private final String message;
