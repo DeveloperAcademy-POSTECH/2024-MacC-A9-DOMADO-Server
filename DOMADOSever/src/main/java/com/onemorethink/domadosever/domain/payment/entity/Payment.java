@@ -6,14 +6,14 @@ import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "payments")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +28,20 @@ public class Payment extends BaseEntity {
     private Rental rental;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id", nullable = false)
     private PaymentMethod paymentMethod;
 
+    // 최종 결제 금액
     @Column(nullable = false)
     private Integer amount;
+
+    // 할인 적용 전 원래 금액
+    @Column(nullable = false)
+    private Integer originalAmount;
+
+    // 할인 금액
+    @Column(nullable = false)
+    private Integer discountAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -44,11 +54,5 @@ public class Payment extends BaseEntity {
 
     @OneToOne(mappedBy = "usedPayment")
     private Coupon usedCoupon;
-
-    @Column
-    private Integer originalMinutes;
-
-    @Column
-    private Integer discountedMinutes;
 
 }
