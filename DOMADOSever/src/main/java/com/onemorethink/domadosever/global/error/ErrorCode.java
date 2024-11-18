@@ -95,7 +95,8 @@ public enum ErrorCode {
     NOT_HIBIKE("HB002", "HiBike 상태가 아닙니다"),
 
     // Coupon Error (CO로 시작)
-    INVALID_COUPON("CO001","유효하지 않은 쿠폰입니다");
+    INVALID_COUPON("CO001","유효하지 않은 쿠폰입니다"),
+    NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다ㅏ" );
 
     private final String code;
     private final String message;

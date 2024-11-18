@@ -49,4 +49,7 @@ public class Rental extends BaseEntity {
     @Column(nullable = false)
     private RentalStatus status = RentalStatus.IN_PROGRESS;
 
+    @Column(nullable = false)
+    private boolean couponApplied = false;  // 쿠폰 적용 여부
+
 }

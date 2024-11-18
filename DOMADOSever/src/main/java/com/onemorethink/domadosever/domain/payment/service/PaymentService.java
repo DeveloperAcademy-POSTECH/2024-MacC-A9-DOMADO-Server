@@ -40,21 +40,20 @@ public class PaymentService {
     private static final LocalTime DAY_START = LocalTime.of(9, 0);    // 주간 시작
     private static final LocalTime DAY_END = LocalTime.of(18, 0);     // 주간 종료
 
-    public Payment processRentalPayment(Rental rental, Long couponId) {
+    public Payment processRentalPayment(Rental rental) {
         // 1. 유효한 결제 수단 조회
         PaymentMethod paymentMethod = paymentMethodRepository
                 .findFirstByUserAndStatusOrderByIdDesc(rental.getUser(), PaymentMethodStatus.ACTIVE)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_PAYMENT_METHOD));
 
-        // 2. 쿠폰 조회 및 검증 (쿠폰ID가 제공된 경우에만)
+        // 2. 쿠폰 조회 및 검증 (쿠폰 적용이 요청된 경우만 제공된 경우에만)
         Coupon selectedCoupon = null;
-        if (couponId != null) {
-            selectedCoupon = couponRepository.findByIdAndUserAndStatusAndExpireDateAfter(
-                    couponId,
+        if (rental.isCouponApplied()) {
+            selectedCoupon = couponRepository.findFirstByUserAndStatusAndExpireDateAfter(
                     rental.getUser(),
                     CouponStatus.ACTIVE,
                     LocalDateTime.now()
-            ).orElseThrow(() -> new BusinessException(ErrorCode.INVALID_COUPON));
+            ).orElseThrow(() -> new BusinessException(ErrorCode.NO_AVAILABLE_COUPON));
         }
 
         // 3. 이용 요금 계산

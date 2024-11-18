@@ -61,4 +61,28 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             LocalDateTime expireDate
     );
 
+    // 사용자의 가장 오래된(먼저 발급된) 유효한 쿠폰 조회
+    @Query("SELECT c FROM Coupon c " +
+            "WHERE c.user = :user " +
+            "AND c.status = :status " +
+            "AND c.expireDate > :currentTime " +
+            "ORDER BY c.createdAt ASC")  // DESC에서 ASC로 변경
+    Optional<Coupon> findFirstByUserAndStatusAndExpireDateAfter(
+            @Param("user") User user,
+            @Param("status") CouponStatus status,
+            @Param("currentTime") LocalDateTime currentTime
+    );
+
+    // 사용자의 모든 유효한 쿠폰 조회 (만료일이 빠른 순)
+    @Query("SELECT c FROM Coupon c " +
+            "WHERE c.user = :user " +
+            "AND c.status = :status " +
+            "AND c.expireDate > :currentTime " +
+            "ORDER BY c.createdAt ASC, c.expireDate ASC")  // 발급일, 만료일 순으로 정렬
+    List<Coupon> findAllValidCoupons(
+            @Param("user") User user,
+            @Param("status") CouponStatus status,
+            @Param("currentTime") LocalDateTime currentTime
+    );
+
 }

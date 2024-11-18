@@ -34,6 +34,7 @@ public class RentalController {
                     - 자전거 상태 및 대여 가능 여부를 확인합니다.
                     - 결제 수단 존재 여부를 확인합니다.
                     - 진행 중인 대여가 없는지 확인합니다.
+                    - 쿠폰 적용을 원하는 경우 유효한 쿠폰이 있는지 확인합니다.
                     """
     )
     @ApiResponses({
@@ -75,12 +76,16 @@ public class RentalController {
             @Parameter(description = "자전거 QR 코드", example = "BIKE123456")
             @RequestParam(name = "qrCode")
             @NotBlank(message = "QR 코드는 필수입니다")
-            String qrCode
+            String qrCode,
+
+            @Parameter(description = "쿠폰 적용 여부", example = "true")
+            @RequestParam(name = "useCoupon", defaultValue = "false")
+            boolean useCoupon
     ) {
         String email = userDetails.getUsername();
         log.debug("Rental request - email: {}, qrCode: {}", email, qrCode);
 
-        RentalResponse response = rentalService.rentBike(email, qrCode);
+        RentalResponse response = rentalService.rentBike(email, qrCode, useCoupon);
         return BaseResponse.success(response);
     }
 

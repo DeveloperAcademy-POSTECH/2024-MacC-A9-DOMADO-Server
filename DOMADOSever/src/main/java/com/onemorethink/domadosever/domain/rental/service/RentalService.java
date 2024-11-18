@@ -34,7 +34,7 @@ public class RentalService {
     // TODO: MQTTService 구현 및 필드 추가
 
 
-    public RentalResponse rentBike(String email, String qrCode) {
+    public RentalResponse rentBike(String email, String qrCode, boolean useCoupon) {
 
         // 1-1. 사용자 조회 - 해당 사용자가 등록되어 있는지 확인
         User user = userRepository.findByEmail(email)
@@ -61,7 +61,7 @@ public class RentalService {
         }
 
         // 5. 대여 생성
-        Rental rental = createRental(user, bike);
+        Rental rental = createRental(user, bike, useCoupon);
 
         // 6. 자전거 상태 업데이트
         updateBikeStatus(bike);
@@ -132,12 +132,13 @@ public class RentalService {
     }
 
 
-    private Rental createRental(User user, Bike bike) {
+    private Rental createRental(User user, Bike bike, boolean useCoupon) {
         Rental rental = Rental.builder()
                 .user(user)
                 .bike(bike)
                 .startTime(LocalDateTime.now())
                 .status(RentalStatus.IN_PROGRESS)
+                .couponApplied(useCoupon)
                 .build();
 
         return rentalRepository.save(rental);
@@ -215,27 +216,6 @@ public class RentalService {
         }
     }
 
-    // 실제 이용 시간 계산 (과금 등에 사용)
-    public int calculateActualUsageMinutes(Rental rental) {
-        LocalDateTime endTime = rental.getEndTime() != null ?
-                rental.getEndTime() : LocalDateTime.now();
-
-        int totalMinutes = (int) Duration.between(
-                rental.getStartTime(),
-                endTime
-        ).toMinutes();
-
-        // 현재 진행 중인 일시정지 시간도 계산에 포함
-        int currentPauseMinutes = 0;
-        if (rental.getLastPauseStartTime() != null) {
-            currentPauseMinutes = (int) Duration.between(
-                    rental.getLastPauseStartTime(),
-                    LocalDateTime.now()
-            ).toMinutes();
-        }
-
-        return totalMinutes - (rental.getPauseMinutes() + currentPauseMinutes);
-    }
 
 //    private void sendLockCommand(Bike bike) {
 //        String topic = "bikes/" + bike.getId() + "/command";
