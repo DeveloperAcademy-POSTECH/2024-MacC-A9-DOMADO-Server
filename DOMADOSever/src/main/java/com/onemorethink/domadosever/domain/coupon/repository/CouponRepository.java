@@ -85,4 +85,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             @Param("currentTime") LocalDateTime currentTime
     );
 
+    Optional<Coupon> findFirstByUserOrderByCreatedAtDesc(User user);
+
 }
