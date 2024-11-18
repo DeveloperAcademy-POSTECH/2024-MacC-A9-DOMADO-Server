@@ -89,6 +89,7 @@ public enum ErrorCode {
     // Return Related Errors (RT로 시작)
     STATION_NOT_FOUND("RT004", "스테이션을 찾을 수 없습니다"),
     INVALID_RETURN_HUB("RT005", "올바르지 않은 반납 허브입니다"),
+    RETURN_PROCESSING_FAILED("RT006","반납처리에 실패했습니다." ),
 
     // HiBike Related Errors (HB로 시작)
     ALREADY_HIBIKE("HB001", "이미 HiBike 상태입니다"),
@@ -96,7 +97,7 @@ public enum ErrorCode {
 
     // Coupon Error (CO로 시작)
     INVALID_COUPON("CO001","유효하지 않은 쿠폰입니다"),
-    NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다ㅏ" );
+    NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다" );
 
     private final String code;
     private final String message;
