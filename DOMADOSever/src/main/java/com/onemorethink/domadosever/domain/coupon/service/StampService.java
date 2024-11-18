@@ -6,6 +6,7 @@ import com.onemorethink.domadosever.domain.coupon.entity.CouponStatus;
 import com.onemorethink.domadosever.domain.coupon.entity.Stamp;
 import com.onemorethink.domadosever.domain.coupon.repository.CouponRepository;
 import com.onemorethink.domadosever.domain.coupon.repository.StampRepository;
+import com.onemorethink.domadosever.domain.rental.dto.StampIssuanceInfo;
 import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.domain.user.repository.UserRepository;
@@ -126,6 +127,52 @@ public class StampService {
                 .rentalId(stamp.getRental().getId())
                 .exchangedCouponId(stamp.getExchangedCoupon() != null ?
                         stamp.getExchangedCoupon().getId() : null)
+                .build();
+    }
+
+    /**
+     * 사용자의 미사용 스탬프 개수 조회
+     */
+    public int countUnusedStamps(User user) {
+        return (int) stampRepository.countByUserAndIsUsedFalse(user);
+    }
+
+    /**
+     * 사용자의 가장 최근 발급된 쿠폰 ID 조회
+     */
+    public Long getLastIssuedCouponId(User user) {
+        return couponRepository.findFirstByUserOrderByCreatedAtDesc(user)
+                .map(Coupon::getId)
+                .orElse(null);
+    }
+
+    /**
+     * HiBike 이용 후 스탬프 발급 처리
+     * @return StampIssuanceInfo - 스탬프 발급 관련 정보
+     */
+    public StampIssuanceInfo issueStampForHiBikeUse(Rental rental) {
+        // 1. 스탬프 발급
+        Stamp stamp = createStamp(rental.getUser(), rental);
+
+        // 2. 미사용 스탬프 개수 확인
+        int unusedStamps = countUnusedStamps(rental.getUser());
+
+        // 3. 쿠폰 발급 여부 확인 (5개 모았을 때)
+        boolean couponIssued = unusedStamps % STAMPS_NEEDED_FOR_COUPON == 0;
+
+        // 4. 발급된 쿠폰 ID 조회
+        Long couponId = null;
+        if (couponIssued) {
+            couponId = getLastIssuedCouponId(rental.getUser());
+        }
+
+        // 5. 스탬프 발급 정보 반환
+        return StampIssuanceInfo.builder()
+                .isIssued(true)
+                .stampId(stamp.getId())
+                .totalUnusedStamps(unusedStamps)
+                .couponIssued(couponIssued)
+                .issuedCouponId(couponId)
                 .build();
     }
 }
