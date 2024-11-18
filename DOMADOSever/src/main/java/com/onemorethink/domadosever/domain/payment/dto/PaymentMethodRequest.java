@@ -12,7 +12,7 @@ import lombok.Setter;
 public class PaymentMethodRequest {
     @Schema(
             description = "카드 번호",
-            example = "3560781234567897", // 신한카드 JCB
+            example = "5218260000000023", // 신한카드 JCB
             pattern = "^[0-9]{16}$",
             required = true
     )

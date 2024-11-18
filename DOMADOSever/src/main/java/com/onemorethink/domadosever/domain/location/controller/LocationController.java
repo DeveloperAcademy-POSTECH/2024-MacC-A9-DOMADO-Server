@@ -61,13 +61,13 @@ public class LocationController {
     })
     @GetMapping("/bikes")
     public BaseResponse<BikeLocationResponse> getBikeLocations(
-            @Parameter(description = "검색 중심점 위도", example = "37.5665")
+            @Parameter(description = "검색 중심점 위도", example = "36.014109")
             @RequestParam(name = "latitude")
             @DecimalMin(value = "-90.0", message = "위도는 -90도 이상이어야 합니다")
             @DecimalMax(value = "90.0", message = "위도는 90도 이하여야 합니다")
             Double latitude,
 
-            @Parameter(description = "검색 중심점 경도", example = "126.9780")
+            @Parameter(description = "검색 중심점 경도", example = "129.325666")
             @RequestParam(name = "longitude")
             @DecimalMin(value = "-180.0", message = "경도는 -180도 이상이어야 합니다")
             @DecimalMax(value = "180.0", message = "경도는 180도 이하여야 합니다")

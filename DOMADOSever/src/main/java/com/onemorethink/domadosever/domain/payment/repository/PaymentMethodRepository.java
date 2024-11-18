@@ -19,4 +19,13 @@ public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Lo
     List<PaymentMethod> findByUser_Id(Long userId);
 
     Optional<PaymentMethod> findByIdAndUser_Email(Long id, String email);
+
+    Optional<PaymentMethod> findFirstByUserAndStatusOrderByIdDesc(
+            User user,
+            PaymentMethodStatus status
+    );
+
+    List<PaymentMethod> findByUserAndStatus(User user, PaymentMethodStatus status);
+
+
 }

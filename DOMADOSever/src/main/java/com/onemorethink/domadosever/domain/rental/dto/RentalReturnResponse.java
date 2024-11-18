@@ -9,11 +9,16 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class RentalResponse {
+public class RentalReturnResponse {
     private Long rentalId;
     private Long bikeId;
-    private LocalDateTime startTime;
-    private String message;
-    private BikeStatus bikeStatus;           // 자전거 상태 (PARKED, IN_USE 등)
+    private LocalDateTime endTime;
+    private Integer usageMinutes;
+    private Integer pauseMinutes;
+    private Integer paymentAmount;
+    private BikeStatus bikeStatus;
     private HiBikeStatus hiBikeStatus;
+    private Long stationId;
+    private StampIssuanceInfo stampInfo;
+    private String message;
 }

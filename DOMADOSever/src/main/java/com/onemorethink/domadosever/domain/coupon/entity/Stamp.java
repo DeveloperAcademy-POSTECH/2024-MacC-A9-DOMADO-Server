@@ -4,15 +4,15 @@ import com.onemorethink.domadosever.domain.rental.entity.Rental;
 import com.onemorethink.domadosever.domain.user.entity.User;
 import com.onemorethink.domadosever.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "stamps")
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Stamp extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
