@@ -3,6 +3,7 @@ package com.onemorethink.domadosever.domain.rental.controller;
 import com.onemorethink.domadosever.domain.rental.dto.*;
 import com.onemorethink.domadosever.domain.rental.service.RentalService;
 import com.onemorethink.domadosever.global.common.BaseResponse;
+import com.onemorethink.domadosever.global.error.exception.BusinessException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -73,7 +75,7 @@ public class RentalController {
     public BaseResponse<RentalResponse> rentBike(
             @AuthenticationPrincipal UserDetails userDetails,
 
-            @Parameter(description = "자전거 QR 코드", example = "BIKE123456")
+            @Parameter(description = "자전거 QR 코드", example = "BIKE001")
             @RequestParam(name = "qrCode")
             @NotBlank(message = "QR 코드는 필수입니다")
             String qrCode,
@@ -200,4 +202,60 @@ public class RentalController {
         );
         return BaseResponse.success(response);
     }
+
+
+    @Operation(
+            summary = "자전거 반납",
+            description = """
+                    Dock에 자전거가 정차된 것이 확인된 후, 사용자가 반납 버튼을 클릭할 때 호출됩니다.
+                    반납 처리가 완료되면 결제가 진행되며, HiBike 이용 후 반납인 경우 스탬프가 발급됩니다.
+                    """,
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "반납 성공",
+                            content = @Content(schema = @Schema(implementation = RentalReturnResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = """
+                                    - 유효하지 않은 위치 정보 (INVALID_COORDINATES)
+                                    - 유효하지 않은 반납 허브 (INVALID_RETURN_HUB)
+                                    - 스테이션이 가득 참 (STATION_FULL)
+                                    """,
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = """
+                                    - 대여 정보를 찾을 수 없음 (RENTAL_NOT_FOUND)
+                                    - 스테이션을 찾을 수 없음 (STATION_NOT_FOUND)
+                                    """,
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "대여 소유자가 아님 (RENTAL_NOT_OWNED)",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+                    )
+            }
+    )
+    @Parameter(name = "rentalId", description = "Rental ID", required = true)
+    @PostMapping("/{rentalId}/return")
+    public BaseResponse<RentalReturnResponse> returnBike(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("rentalId") Integer rentalId,
+            @Valid @RequestBody RentalReturnRequest request
+    ) {
+        String email = userDetails.getUsername();
+        try {
+            RentalReturnResponse response = rentalService.returnBike(email, rentalId, request);
+            return BaseResponse.success(response);
+        } catch (BusinessException e) {
+            log.error("자전거 반납 중 오류 발생. rentalId: {}, email: {}, error: {}",
+                    rentalId, email, e.getMessage());
+            return BaseResponse.failure(e.getErrorCode());
+        }
+    }
 }
+
