@@ -1,6 +1,7 @@
 package com.onemorethink.domadosever.domain.user.service;
 
 import com.onemorethink.domadosever.domain.user.dto.LoginRequest;
+import com.onemorethink.domadosever.domain.user.dto.LoginResponse;
 import com.onemorethink.domadosever.domain.user.dto.RegisterRequest;
 import com.onemorethink.domadosever.domain.user.dto.UserResponse;
 import com.onemorethink.domadosever.domain.user.entity.Role;
@@ -44,7 +45,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
 
     @Transactional
-    public TokenResponse login(LoginRequest request, String userAgent, String clientIp) {
+    public LoginResponse login(LoginRequest request, String userAgent, String clientIp) {
         try {
             // 이메일 형식 검증
             if (!isValidEmail(request.getEmail())) {
@@ -69,11 +70,7 @@ public class AuthenticationService {
             String accessToken = jwtTokenProvider.createAccessToken(authentication);
             String refreshToken = jwtTokenProvider.createRefreshToken(authentication, userAgent, clientIp);
 
-            return TokenResponse.builder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
-                    .tokenType("Bearer")
-                    .build();
+            return LoginResponse.of(accessToken, refreshToken, user);
 
         } catch (BadCredentialsException e) {
             throw new AuthException(ErrorCode.INVALID_PASSWORD);
