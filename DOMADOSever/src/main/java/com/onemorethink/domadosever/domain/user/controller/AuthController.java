@@ -1,9 +1,6 @@
 package com.onemorethink.domadosever.domain.user.controller;
 
-import com.onemorethink.domadosever.domain.user.dto.LoginRequest;
-import com.onemorethink.domadosever.domain.user.dto.LogoutRequest;
-import com.onemorethink.domadosever.domain.user.dto.RegisterRequest;
-import com.onemorethink.domadosever.domain.user.dto.UserResponse;
+import com.onemorethink.domadosever.domain.user.dto.*;
 import com.onemorethink.domadosever.domain.user.service.AuthenticationService;
 import com.onemorethink.domadosever.global.common.BaseResponse;
 import com.onemorethink.domadosever.global.security.dto.TokenRefreshRequest;
@@ -90,7 +87,7 @@ public class AuthController {
             )
     })
     @PostMapping("/login")
-    public BaseResponse<TokenResponse> login(
+    public BaseResponse<LoginResponse> login(
             @Valid @RequestBody
             @Parameter(description = "로그인 정보", required = true)
             LoginRequest request,
@@ -100,8 +97,8 @@ public class AuthController {
         String userAgent = httpRequest.getHeader("User-Agent");
         String clientIp = extractClientIp(httpRequest);
 
-        TokenResponse tokenResponse = authenticationService.login(request, userAgent, clientIp);
-        return BaseResponse.success(tokenResponse);
+        LoginResponse loginResponse = authenticationService.login(request, userAgent, clientIp);
+        return BaseResponse.success(loginResponse);
     }
 
     @Operation(
