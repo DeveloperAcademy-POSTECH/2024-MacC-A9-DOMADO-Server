@@ -97,7 +97,10 @@ public enum ErrorCode {
 
     // Coupon Error (CO로 시작)
     INVALID_COUPON("CO001","유효하지 않은 쿠폰입니다"),
-    NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다" );
+    NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다" ),
+
+    // Socket Error (S로 시작)
+    INVALID_MESSAGE_FORMAT("S001","잘못된 메시지 형식입니다.");
 
     private final String code;
     private final String message;
