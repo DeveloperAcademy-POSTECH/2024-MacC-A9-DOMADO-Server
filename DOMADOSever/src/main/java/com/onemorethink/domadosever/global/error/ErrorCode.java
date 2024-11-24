@@ -100,7 +100,16 @@ public enum ErrorCode {
     NO_AVAILABLE_COUPON("CO002", "이용가능한 쿠폰이 없습니다" ),
 
     // Socket Error (S로 시작)
-    INVALID_MESSAGE_FORMAT("S001","잘못된 메시지 형식입니다.");
+    INVALID_MESSAGE_FORMAT("S001","잘못된 메시지 형식입니다."),
+
+    // APNs Related Errors (AP로 시작)
+    APNS_INITIALIZATION_ERROR("AP001", "APNs 클라이언트 초기화에 실패했습니다"),
+    APNS_SEND_ERROR("AP002", "푸시 알림 전송에 실패했습니다"),
+    APNS_INVALID_TOKEN("AP003", "유효하지 않은 디바이스 토큰입니다"),
+    APNS_PAYLOAD_TOO_LARGE("AP004", "푸시 알림 데이터가 너무 큽니다"),
+    INVALID_DEVICE_TOKEN_FORMAT("AP005", "잘못된 디바이스 토큰 형식입니다"),
+    DEVICE_TOKEN_NOT_FOUND("AP006", "등록된 디바이스 토큰이 없습니다");
+
 
     private final String code;
     private final String message;
