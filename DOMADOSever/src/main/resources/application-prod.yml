@@ -43,6 +43,7 @@ logging:
 
 # APNs 설정 추가
 apns:
+  bundle-id: ${APNS_BUNDLE_ID}
   certificate:
     path: ${APNS_CERT_PATH}
     password: ${APNS_CERT_PASSWORD}
