@@ -47,4 +47,4 @@ apns:
     path: ${APNS_CERT_PATH}
     password: ${APNS_CERT_PASSWORD}
     # 개발용 APNs 서버 사용 (배포 시에는 production으로 변경 필요)
-    development: true
+  production: false 
