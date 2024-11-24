@@ -2,7 +2,6 @@ package com.onemorethink.domadosever.global.apns.service;
 
 import com.eatthepath.pushy.apns.ApnsClient;
 import com.eatthepath.pushy.apns.PushNotificationResponse;
-import com.eatthepath.pushy.apns.util.ApnsPayloadBuilder;
 import com.eatthepath.pushy.apns.util.SimpleApnsPushNotification;
 import com.onemorethink.domadosever.global.apns.dto.ApnsNotificationRequest;
 import com.onemorethink.domadosever.global.error.ErrorCode;
@@ -10,8 +9,8 @@ import com.onemorethink.domadosever.global.error.exception.ApnsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 
