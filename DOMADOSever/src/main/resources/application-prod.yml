@@ -40,3 +40,11 @@ logging:
     com.onemorethink.domadosever: DEBUG  # 변경
   file:
     name: ./logs/application.log
+
+# APNs 설정 추가
+apns:
+  certificate:
+    path: ${APNS_CERT_PATH}
+    password: ${APNS_CERT_PASSWORD}
+    # 개발용 APNs 서버 사용 (배포 시에는 production으로 변경 필요)
+    development: true
